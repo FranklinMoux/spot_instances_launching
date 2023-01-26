@@ -1,0 +1,38 @@
+# use the boto3 library to launch a spot instance
+
+import boto3
+
+# Initialize the EC2 client
+ec2 = boto3.client('ec2')
+
+# Define the instance type
+instance_type = 't2.micro'
+
+# Define the AMI ID for the desired operating system
+ami_id = 'ami-0ff8a91507f77f867'
+
+# Define the key pair and security group for the instance
+key_pair = 'my-key-pair'
+security_group = 'my-security-group'
+
+# Define the maximum price for the spot instance
+max_price = '0.05'
+
+# Request a spot instance
+response = ec2.request_spot_instances(
+    InstanceCount=1,
+    LaunchSpecification={
+        'ImageId': ami_id,
+        'InstanceType': instance_type,
+        'KeyName': key_pair,
+        'SecurityGroupIds': [security_group],
+    },
+    SpotPrice=max_price,
+    Type='one-time'
+)
+
+# Extract the spot instance request ID
+spot_instance_request_id = response['SpotInstanceRequests'][0]['SpotInstanceRequestId']
+
+# Print the spot instance request ID
+print(f'Spot instance request submitted: {spot_instance
